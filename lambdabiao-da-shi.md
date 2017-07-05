@@ -18,7 +18,7 @@
 
 ```
     编程范式
-    
+
     函数式编程是一种编程范式，我们常见的编程范式有命令式编程（Imperative programming），函数式编程，逻辑式编程，常见的面向对象
 编程也是一种命令式编程。
     命令式编程是面向计算机硬件的抽象，有变量（对应着存储单元），赋值语句（获取，存储指令），表达式（内存引用和算术运算）和控制语
@@ -46,6 +46,16 @@
 [https://www.zhihu.com/question/28292740](https://www.zhihu.com/question/28292740)
 
 [http://janfan.cn/chinese/2015/05/18/functional-programming.html](http://janfan.cn/chinese/2015/05/18/functional-programming.html)
+
+大致了解了函数式编程后，就能理解Lambda表达式的优势。
+
+* 函数式编程是技术的发展方向，而Lambda是函数式编程最基础的内容，所以，Java 8中加入Lambda表达式本身是符合技术发展方向的。
+
+* 通过引入Lambda，最直观的一个改进是，不用再写大量的匿名内部类。事实上，还有更多由于函数式编程本身特性带来的提升。比如：代码的可读性会更好、高阶函数引入了函数组合的概念。
+
+* 此外，因为Lambda的引入，集合操作也得到了极大的改善。比如，引入stream API，把map、reduce、filter这样的基本函数式编程的概念与Java集合结合起来。在大多数情况下，处理集合时，Java程序员可以告别for、while、if这些语句。
+
+* 随之而来的是，map、reduce、filter等操作都可以并行化，在一些条件下，可以提升性能。
 
 ---
 
