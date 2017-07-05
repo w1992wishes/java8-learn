@@ -145,10 +145,8 @@ Runnable r1 = () -> System.out.println("Hello World 1");
 Comparator有一个compare\(\)方法，具体形式是int compare\(T o1, T o2\)，代表接受两个参数，返回一个整形，将这个函数描述符和Lambda表达式的结构对应起来，\(T o1, T o2\)代表参数列表，{if \(o1.value &gt; o2.value\){ retrun 1} else{return -1} }，可以得到：
 
 ```
-(T o1, T o2) -> { if (o1.value > o2.value){ retrun 1} else{return -1} }
+Comparator comp = (T o1, T o2) -> { if (o1.value > o2.value){ retrun 1} else{return -1} }
 ```
-
-
 
 
 
