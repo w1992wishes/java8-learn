@@ -61,11 +61,15 @@
 
 ### 三、Lambda表达式的结构
 
-* 参数列表——同方法参数。
+如new Thread\(**\(\) -&gt; System.out.print\("thread is running"\)**\).start\(\)中的加粗字体：
 
-* 箭头——箭头-&gt;把参数列表与Lambda主体分隔开。
+* 参数列表——同方法参数，这是\(\)，即没有参数
 
-* Lambda主体——表达式就是Lambda的返回值了。
+* 箭头——箭头-&gt;把参数列表与Lambda主体分隔开
+
+* Lambda主体——System.out.print\("thread is running"\)，打印一句话
+
+
 
 
 
