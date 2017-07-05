@@ -94,7 +94,7 @@
 
 对于java 8，应该在函数式接口上使用Lambda表达式。
 
-Question：什么是函数式接口？
+#### 4.1、什么是函数式接口？
 
 函数式接口就是只定义一个抽象方法的接口。
 
@@ -106,6 +106,24 @@ int compare(T o1, T o2);
 public interface Runnable{
 void run();
 }
+```
+
+函数式接口可以干什么？
+
+Lambda表达式允许直接以内联的形式为函数式接口的抽象方法提供实现，并把整个表达式作为函数式接口的实例（具体说来，是函数式接口一个具体实现的实例）。用匿名内部类也可以完成同样的事情，只不过比较笨拙：需要提供一个实现，然后再直接内联将它实例化。
+
+看个例子：
+
+```
+//使用Lambda表达式
+Runnable r1 = () -> System.out.println("Hello World 1");     
+
+//使用内部类
+Runnable r2 = new Runnable(){
+    public void run(){
+        System.out.println("Hello World 2");
+    }
+};
 ```
 
 
