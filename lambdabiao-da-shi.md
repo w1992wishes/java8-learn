@@ -148,5 +148,11 @@ Comparator有一个compare\(\)方法，具体形式是int compare\(T o1, T o2\)�
 Comparator comp = (T o1, T o2) -> { if (o1.value > o2.value){ retrun 1} else{return -1} }
 ```
 
+#### 4.3、java 8新引入的函数式接口
+
+##### 4.3.1、Predicate
+
+java.util.function.Predicate&lt;T&gt;接口定义了一个名叫test的抽象方法，它接受泛型T对象，并返回一个boolean。
+
 
 
