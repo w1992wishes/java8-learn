@@ -1,3 +1,4 @@
-# My Awesome Book
+# java 8 新特性学习笔记
 
-This file file serves as your book's preface, a great place to describe your book's content and ideas.
+java 9即将发布，在这之前，还是先把java 8 的新特性总结一下。
+
