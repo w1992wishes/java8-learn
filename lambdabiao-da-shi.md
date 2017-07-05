@@ -16,7 +16,13 @@
 
 想要回答这个问题，应该先了解一下什么是函数式编程。
 
-https://www.zhihu.com/question/28292740
+>
+
+[https://www.zhihu.com/question/28292740](https://www.zhihu.com/question/28292740)
+
+http://janfan.cn/chinese/2015/05/18/functional-programming.html
 
 ---
+
+
 
