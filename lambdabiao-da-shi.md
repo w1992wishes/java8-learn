@@ -131,15 +131,24 @@ Runnable r2 = new Runnable(){
 
 如何从函数式接口到Lambda表达式，这需要引入函数描述符的概念。
 
-函数式接口的抽象方法的签名基本上就是Lambda表达式的签名。我们将这种抽象方法叫作函数描述符。
+函数式接口的抽象方法的签名基本上就是Lambda表达式的签名。我们将这种抽象方法叫作  
+函数描述符。
 
 具体分析一下：
 
 Runnable只有一个run\(\)方法，具体形式是 void run\(\)，代表不接受参数也不返回值，将这个函数描述符和Lambda表达式的结构对应起来，\(\)代表没有参数，System.out.println\("Hello World 1"\)表示不返回值，所以可以得到：
 
 ```
-Runnable r1 = () -> System.out.println("Hello World 1"); 
+Runnable r1 = () -> System.out.println("Hello World 1");
 ```
+
+Comparator有一个compare\(\)方法，具体形式是int compare\(T o1, T o2\)，代表接受两个参数，返回一个整形，将这个函数描述符和Lambda表达式的结构对应起来，\(T o1, T o2\)代表参数列表，{if \(o1.value &gt; o2.value\){ retrun 1} else{return -1} }，可以得到：
+
+```
+(T o1, T o2) -> { if (o1.value > o2.value){ retrun 1} else{return -1} }
+```
+
+
 
 
 
