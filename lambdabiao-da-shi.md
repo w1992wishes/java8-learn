@@ -82,12 +82,30 @@
 
 //返回类型是表达式主体语句的返回类型int
   (int x)->x+1
-  
+
 //表达式中有多条语句
   (Apple appple) -> {
     System.out.println(apple.getWeight());
     System.out.println(apple.getColor());
   }
+```
+
+### 四、哪里使用及如何使用Lambda表达式
+
+对于java 8，应该在函数式接口上使用Lambda表达式。
+
+Question：什么是函数式接口？
+
+函数式接口就是只定义一个抽象方法的接口。
+
+```
+public interface Comparator<T> {
+int compare(T o1, T o2);
+}
+
+public interface Runnable{
+void run();
+}
 ```
 
 
