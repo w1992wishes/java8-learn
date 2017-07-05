@@ -72,7 +72,7 @@
 ```
 //零个
  ()-> System.out.println("no argument");
- 
+
 //一个
   x->x+1
 
@@ -81,7 +81,13 @@
 
 
 //返回类型是表达式主体语句的返回类型int
-(int x)->x+1
+  (int x)->x+1
+  
+//表达式中有多条语句
+  (Apple appple) -> {
+    System.out.println(apple.getWeight());
+    System.out.println(apple.getColor());
+  }
 ```
 
 
