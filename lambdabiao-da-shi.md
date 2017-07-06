@@ -153,6 +153,7 @@ Comparator comp = (T o1, T o2) -> { if (o1.value > o2.value){ retrun 1} else{ret
 java.util.function.Predicate&lt;T&gt;接口定义了一个名叫test的抽象方法，它接受泛型T对象，并返回一个boolean。
 
 ```
+//Predicate接口
 public interface Predicate<T>{
     boolean test(T t);
 }
