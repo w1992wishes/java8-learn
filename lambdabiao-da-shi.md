@@ -152,3 +152,28 @@ Comparator comp = (T o1, T o2) -> { if (o1.value > o2.value){ retrun 1} else{ret
 
 java.util.function.Predicate&lt;T&gt;接口定义了一个名叫test的抽象方法，它接受泛型T对象，并返回一个boolean。
 
+```
+public interface Predicate<T>{
+    boolean test(T t);
+}
+
+public static <T> List<T> filter(List<T> list, Predicate<T> p) {
+    List<T> results = new ArrayList<>();
+    for(T s: list){
+        if(p.test(s)){
+        results.add(s);
+        }
+    }
+    return results;
+}
+
+Predicate<String> nonEmptyStringPredicate = (String s) -> !s.isEmpty();
+List<String> nonEmpty = filter(listOfStrings, nonEmptyStringPredicate);
+```
+
+##### 4.3.2、Consumer
+
+java.util.function.Consumer&lt;T&gt;定义了一个名叫accept的抽象方法，它接受泛型T的对象，没有返回（void）。
+
+
+
