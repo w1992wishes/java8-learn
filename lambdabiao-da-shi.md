@@ -173,7 +173,5 @@ List<String> nonEmpty = filter(listOfStrings, nonEmptyStringPredicate);
 
 ##### 4.3.2、Consumer
 
-java.util.function.Consumer&lt;T&gt;定义了一个名叫accept的抽象方法，它接受泛型T的对象，没有返回（void）。
-
-
+java.util.function.Consumer&lt;T&gt;定义了一个名叫accept的抽象方法，它接受泛型T的对象，没有返回（void）。
 
