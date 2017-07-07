@@ -393,5 +393,69 @@ Callable<String> helloCallable1(String name){
 
 lambda 表达式允许我们定义一个匿名方法，并允许我们以函数式接口的方式使用它，方法引用则能够在已有的方法上实现同样的特性。
 
- 
+方法引用和 lambda 表达式拥有相同的特性（例如，它们都需要一个目标类型，并需要被转化为函数式接口的实例），不过并不需要为方法引用提供方法体，可以直接通过方法名称引用已有方法。
+
+```
+public class Test3 {
+    public static void main(String[] args) {
+        Person p1 = new Person("a", 11);
+        Person p2 = new Person("b", 21);
+        Person p3 = new Person("c", 31);
+        Person p4 = new Person("d", 41);
+        Person p5 = new Person("e", 51);
+        Person p6 = new Person("f", 42);
+        Person p7 = new Person("g", 32);
+        Person p8 = new Person("h", 22);
+        Person p9 = new Person("i", 12);
+        Person[] people = { p1, p2, p3, p4, p5, p6, p7, p8, p9 };
+
+        System.out.println(people[3]);
+        Comparator<Person> byAge = Comparator.comparing(p -> p.getAge());
+        Arrays.sort(people, byAge);
+        System.out.println(people[3]);
+    }
+}
+
+class Person{
+    private String name;
+    private int age;
+
+    public Person(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    public String toString(){
+        return this.name + " : " + this.age;
+    }
+}
+```
+
+这里可以用方法引用代替Lambda表达式：
+
+```
+//lambda方式
+Comparator<Person> byAge = Comparator.comparing(p -> p.getAge());
+
+//方法引用
+Comparator<Person> byAge = Comparator.comparing(Person::getAge);
+```
+
+
 
