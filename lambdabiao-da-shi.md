@@ -349,7 +349,7 @@ Callable<String> helloCallable1(String name){
         String hello = "hello";
         return () -> (hello + "," + name);
     }
-    
+
 //这段代码在JAVA 7中编译报错， JAVA 8则正确
 Callable<String> helloCallable2(String name){
     String hello = "hello";
@@ -365,4 +365,21 @@ Callable<String> helloCallable2(String name){
 在 Java SE 7 中，编译器对内部类中引用的外部变量（即捕获的变量）要求非常严格：如果捕获的变量没有被声明为final就会产生一个编译错误。现在放宽了这个限制——对于 lambda 表达式和内部类，允许在其中捕获那些符合有效只读（Effectively final）的局部变量。
 
 简单的说，如果一个局部变量在初始化后从未被修改过，那么它就符合有效只读的要求，换句话说，加上`final`后也不会导致编译错误的局部变量就是有效只读变量。
+
+对`this`的引用，以及通过`this`对未限定字段的引用和未限定方法的调用在**本质上都属于使用`final`局部变量**。包含此类引用的 lambda 表达式相当于捕获了`this`实例。在其它情况下，lambda 对象不会保留任何对`this`的引用。
+
+这个特性对内存管理是一件好事：内部类实例会一直保留一个对其外部类实例的强引用，而那些没有捕获外部类成员的 lambda 表达式则不会保留对外部类实例的引用。要知道内部类的这个特性往往会造成内存泄露。
+
+尽管放宽了对捕获变量的语法限制，但试图修改捕获变量的行为仍然会被禁止，比如下面这个例子就是非法的：
+
+```
+Callable<String> helloCallable1(String name){
+        String hello = "hello";
+        //试图修改捕获变量
+        hello = "hi";
+        return () -> (hello + "," + name);
+    }
+```
+
+
 
