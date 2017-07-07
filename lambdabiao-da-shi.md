@@ -288,6 +288,8 @@ Comparator<String> c = (str1, str2) -> str1.length().compareTo(str2.length());
 
 但并不是说省略参数类型就是好的，有时候显式写出类型更易读，有时候去掉它们更易读。这需要判断。
 
+---
+
 ### 六 、Lambda表达式作用域
 
 先看一段代码：
@@ -389,6 +391,8 @@ Callable<String> helloCallable1(String name){
 
 * 局部变量必须显式声明为final，或事实上是final。换句话说，Lambda表达式只能捕获指派给它们的局部变量一次。
 
+---
+
 ### 七、方法引用
 
 lambda 表达式允许定义一个匿名方法，并允许以函数式接口的方式使用它，方法引用则能够在已有的方法上实现同样的特性。
@@ -470,6 +474,8 @@ Person::getAge可以被看作为 lambda 表达式的简写形式。尽管方法�
 * 指向现有对象的实例方法的方法引用（假设局部变量expensiveTransaction用于存放Transaction类型的对象，它支持实例方法getValue，那么可以写expensiveTransaction::getValue）。
 * 对于一个现有构造函数，可以利用它的名称和关键字new来创建它的一个引用：
   ClassName::new。
+
+---
 
 ### 八、Lambda表达式演化实例
 
@@ -642,6 +648,8 @@ public class Test8 {
 }
 ```
 
+---
+
 ### 九、复合Lambda表达式
 
 可以把多个简单的Lambda复合成复杂的表达式。比如，可以让两个谓词之间做一个or操作，组合成一个更大的谓词。而且，还可以让一个函数的结果成为另一个函数的输入。
@@ -653,12 +661,12 @@ inventory.sort(comparing(Apple::getWeight)).reversed();//按重量逆序排列
 
 // 在Apple中新增加shape属性，实现重量相同时按shape排序
 inventory.sort(comparing(Apple::getWeight)).reversed().thenComparing(Apple::getShape);
-
 ```
 
 #### 9.2、谓词复合
 
-谓词接口包括三个方法：negate、and和or，可以重用已有的Predicate来创建更复杂的谓词。
+谓词接口包括三个方法：negate、and和or，可以重用已有的Predicate来创建更复  
+杂的谓词。
 
 ```
 Predicate<Apple> redApple = a -> a.getColor().equals("red");
