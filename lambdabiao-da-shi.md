@@ -274,3 +274,17 @@ PrivilegedAction<Integer> p = () -> 42;
 
 第一个赋值的目标类型是Callable&lt;Integer&gt; ， 第二个赋值的目标类型是PrivilegedAction&lt;Integer&gt;。
 
+#### 5.3、Lambda表达式参数类型推断
+
+Java编译器不仅可以从上下文（目标类型）推断出用什么函数式接口来配合Lambda表达式，它也可以推断出适合Lambda的签名。
+
+这样做的好处在于，编译器可以了解Lambda表达式的参数类型，这样就可以在Lambda语法中省去标注参数类型。换句话说，Java编译器可以推断Lambda的参数类型。
+
+```
+List<String> shortStr = filter(strs, (str) -> str.length() < 5);
+
+Comparator<String> c = (str1, str2) -> str1.length().compareTo(str2.length());
+```
+
+
+
