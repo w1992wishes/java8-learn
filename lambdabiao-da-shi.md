@@ -389,5 +389,9 @@ Callable<String> helloCallable1(String name){
 
 * 局部变量必须显式声明为final，或事实上是final。换句话说，Lambda表达式只能捕获指派给它们的局部变量一次。
 
+### 七、方法引用
 
+lambda 表达式允许我们定义一个匿名方法，并允许我们以函数式接口的方式使用它，方法引用则能够在已有的方法上实现同样的特性。
+
+ 
 
