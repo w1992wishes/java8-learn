@@ -644,7 +644,71 @@ public class Test8 {
 
 ### 九、复合Lambda表达式
 
-可以把多个简单的Lambda复合成复杂的表达式。比如，可以让两个谓词之间做一个or操作，组合成一个更大的谓词。而且，还可以让一个函数的结果成为另一个函数的输入。
+可以把多个简单的Lambda复合成复杂的表达式。比如，可以让两个谓词之间做一个or操作，组合成一个更大的谓词。而且，还可以让一个函数的结果成为另一个函数的输入。
+
+#### 9.1、比较器复合
+
+```
+inventory.sort(comparing(Apple::getWeight)).reversed();//按重量逆序排列
+
+// 在Apple中新增加shape属性，实现重量相同时按shape排序
+inventory.sort(comparing(Apple::getWeight)).reversed().thenComparing(Apple::getShape);
+
+```
+
+#### 9.2、谓词复合
+
+谓词接口包括三个方法：negate、and和or，可以重用已有的Predicate来创建更复杂的谓词。
+
+```
+Predicate<Apple> redApple = a -> a.getColor().equals("red");
+
+Predicate<Apple> redAndHeavyAppleOrGreen =
+    redApple
+    .and(a -> a.getWeight() > 0.4)
+    .or(a -> "green".equals(a.getColor()));
+```
+
+#### 9.3、函数复合
+
+```
+Function<Integer, Integer> f1 = x -> x+1;
+Function<Integer, Integer> f2 = x -> x*2;
+Function<Integer, Integer> h = f1.andThen(f2);
+int result = h.apply(1);
+```
+
+一个具体一点的例子：
+
+```
+public class Test9 {
+    public static void main(String[] args) {
+        Function<String, String> addHeader = Letter::addHeader;
+        //加抬头、落款并检查
+        Function<String, String> transformationPipeline1 =
+                addHeader.andThen(Letter::addFooter)
+                .andThen(Letter::checkSpelling);
+
+        //加抬头、落款不做检查
+        Function<String, String> transformationPipeline2 =
+                addHeader.andThen(Letter::addFooter);
+    }
+}
+
+class Letter{
+    public static String addHeader(String text){
+        return "From Wan" + text;
+    }
+
+    public static String addFooter(String text){
+        return "Kind regards" + text;
+    }
+
+    public static String checkSpelling(String text){
+        return text.replaceAll("lamdba", "lambda");
+    }
+}
+```
 
 
 
