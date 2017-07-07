@@ -217,7 +217,7 @@ List<Integer> l = map(Arrays.asList("lambdas","in","action"),(String s) -> s.len
 
 上面的函数式接口只适用于引用对象，对于基本数据类型，java 8引入了IntPredicat、DoublePredicat、IntConsume、IntFunctio等函数式接口，可以避免进行装箱拆箱的操作。
 
-PS：请注意，任何函数式接口都不允许抛出受检异常（checked exception）。如果需要Lambda表达式来抛出异常，有两种办法：定义一个自己的函数式接口，并声明受检异常，或者把Lambda包在一个try/catch块中。
+PS：请注意，任何函数式接口都不允许抛出受检异常（checked exception）。如果需要Lambda表达式来抛出异常，有两种办法：定义一个自己的函数式接口，并声明受检异常，或者把Lambda包在一个try/catch块中。
 
 
 
