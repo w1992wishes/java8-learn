@@ -288,3 +288,51 @@ Comparator<String> c = (str1, str2) -> str1.length().compareTo(str2.length());
 
 但并不是说省略参数类型就是好的，有时候显式写出类型更易读，有时候去掉它们更易读。这需要判断。
 
+### 六 、Lambda表达式作用域
+
+先看一段代码：
+
+```
+package com.wan.test
+
+public class Test2 {
+    Runnable r1 = () -> System.out.println(this);
+    Runnable r2 = () ->  System.out.println(toString());
+    Runnable r3 = new Runnable() {
+        @Override
+        public void run() {
+            System.out.println(this);
+        }
+    };
+    Runnable r4 = new Runnable() {
+        @Override
+        public void run() {
+            System.out.println(toString());
+        }
+    };
+    public String toString() {  return "Hello, world"; }
+    public static void main(String... args) {
+        new Test2().r1.run();
+        new Test2().r2.run();
+        new Test2().r3.run();
+        new Test2().r4.run();
+    }
+}
+```
+
+结果是：
+
+```
+Hello, world
+Hello, world
+com.wan.test.Test2$1@41629346
+com.wan.test.Test2$2@404b9385
+```
+
+Lambda表达式和内部类呈现出不同的结果，是因为：
+
+* 内部类中通过继承得到的成员（包括来自`Object`的方法）可能会把外部类的成员掩盖（shadow），此外未限定（unqualified）的`this`引用会指向内部类自己而非外部类。
+* 相对于内部类，lambda 表达式的语义就十分简单：它不会从超类（supertype）中继承任何变量名，也不会引入一个新的作用域。lambda 表达式基于词法作用域，也就是说 lambda 表达式函数体里面的变量和它外部环境的变量具有相同的语义（也包括 lambda 表达式的形式参数）。此外，’this’ 关键字及其引用在 lambda 表达式内部和外部也拥有相同的语义。
+
+
+
