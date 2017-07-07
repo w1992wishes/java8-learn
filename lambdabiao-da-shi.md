@@ -276,9 +276,9 @@ PrivilegedAction<Integer> p = () -> 42;
 
 #### 5.3、Lambda表达式参数类型推断
 
-Java编译器不仅可以从上下文（目标类型）推断出用什么函数式接口来配合Lambda表达式，它也可以推断出适合Lambda的签名。
+Java编译器不仅可以从上下文（目标类型）推断出用什么函数式接口来配合Lambda表达式，它也可以推断出适合Lambda的签名。
 
-这样做的好处在于，编译器可以了解Lambda表达式的参数类型，这样就可以在Lambda语法中省去标注参数类型。换句话说，Java编译器可以推断Lambda的参数类型。
+这样做的好处在于，编译器可以了解Lambda表达式的参数类型，这样就可以在Lambda语法中省去标注参数类型。换句话说，Java编译器可以推断Lambda的参数类型。
 
 ```
 List<String> shortStr = filter(strs, (str) -> str.length() < 5);
@@ -286,5 +286,5 @@ List<String> shortStr = filter(strs, (str) -> str.length() < 5);
 Comparator<String> c = (str1, str2) -> str1.length().compareTo(str2.length());
 ```
 
-
+但并不是说省略参数类型就是好的，有时候显式写出类型更易读，有时候去掉它们更易读。这需要判断。
 
