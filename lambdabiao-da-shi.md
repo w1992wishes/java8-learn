@@ -466,8 +466,8 @@ Person::getAge可以被看作为 lambda 表达式的简写形式。尽管方法�
 主要有三类：
 
 * 指向静态方法的方法引用（例如Integer的parseInt方法，写作Integer::parseInt）。
-* 指向任意类型实例方法的方法引用（ 例如String 的length 方法， 写作  String::length）。
-* 指向现有对象的实例方法的方法引用（假设局部变量expensiveTransaction  用于存放Transaction类型的对象，它支持实例方法getValue，那么可以写Transaction::getValue）。
+* 指向任意类型实例方法的方法引用（ 例如String 的length 方法， 写作String::length）。
+* 指向现有对象的实例方法的方法引用（假设局部变量expensiveTransaction用于存放Transaction类型的对象，它支持实例方法getValue，那么可以写expensiveTransaction::getValue）。
 
 
 
