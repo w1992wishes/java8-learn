@@ -90,6 +90,8 @@
   }
 ```
 
+---
+
 ### 四、哪里使用及如何使用Lambda表达式
 
 对于java 8，应该在函数式接口上使用Lambda表达式。
@@ -219,11 +221,50 @@ List<Integer> l = map(Arrays.asList("lambdas","in","action"),(String s) -> s.len
 
 PS：请注意，任何函数式接口都不允许抛出受检异常（checked exception）。如果需要Lambda表达式来抛出异常，有两种办法：定义一个自己的函数式接口，并声明受检异常，或者把Lambda包在一个try/catch块中。
 
+---
+
 ### 五、类型检查、类型推断以及限制
 
 Lambda表达式可以为函数式接口生成一个实例。然而，Lambda表达式本身并不包含它在实现哪个函数式接口的信息，也就是说同一个Lambda表达式可以是多个函数式接口的实例，这里面就涉及到了类型检查和类型推断。
 
 #### 5.1、类型检查
 
-Lambda的类型是从使用Lambda的上下文推断出来的。上下文（比如，接受它传递的方法的参数，或接受它的值的局部变量）中Lambda表达式表示的类型称为目标类型。
+编译器负责推导 lambda 表达式类型。它利用 lambda 表达式所在上下文所期待的类型进行推导，这个**被期待的类型被称为目标类型**。通过一个例子看看。
+
+```
+public class Test1 {
+
+    public static void main(String[] args) {
+        List<String> strs = new ArrayList<String>();
+        strs.add("aaa");
+        strs.add("bbbb");
+        strs.add("ccccc");
+        strs.add("dddddd");
+
+        //长度小于5的str
+        List<String> shortStr = filter(strs, (String str) -> str.length() < 5);
+
+        // [aaa, bbbb]
+        System.out.println(shortStr);
+    }
+
+    public static List<String> filter(List<String> strs, Predicate<String> p){
+        List<String> filterStr = new ArrayList<>();
+        for (String str : strs){
+            if (p.test(str)){
+                filterStr.add(str);
+            }
+        }
+        return filterStr;
+    }
+}
+```
+
+![](/assets/1.png)
+
+
+
+
+
+
 
