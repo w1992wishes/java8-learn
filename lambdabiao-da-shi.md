@@ -391,9 +391,11 @@ Callable<String> helloCallable1(String name){
 
 ### 七、方法引用
 
-lambda 表达式允许我们定义一个匿名方法，并允许我们以函数式接口的方式使用它，方法引用则能够在已有的方法上实现同样的特性。
+lambda 表达式允许定义一个匿名方法，并允许以函数式接口的方式使用它，方法引用则能够在已有的方法上实现同样的特性。
 
 方法引用和 lambda 表达式拥有相同的特性（例如，它们都需要一个目标类型，并需要被转化为函数式接口的实例），不过并不需要为方法引用提供方法体，可以直接通过方法名称引用已有方法。
+
+**需要使用方法引用时，目标引用放在分隔符::前，方法的名称放在后面**。
 
 ```
 public class Test3 {
@@ -456,6 +458,8 @@ Comparator<Person> byAge = Comparator.comparing(p -> p.getAge());
 //方法引用
 Comparator<Person> byAge = Comparator.comparing(Person::getAge);
 ```
+
+Person::getAge可以被看作为 lambda 表达式的简写形式。尽管方法引用不一定会把语法变的更紧凑，但它拥有更明确的语义——如果一个Lambda代表的只是“直接调用这个方法”，那最好还是用名称来调用它，而不是去描述如何调用它。
 
 
 
