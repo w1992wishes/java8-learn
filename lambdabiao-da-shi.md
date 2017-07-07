@@ -342,5 +342,27 @@ lambda 表达式不可以掩盖任何其所在上下文中的局部变量，它�
  for (int i=0; i<10; i++){}
 ```
 
+#### 6.1、捕获变量
 
+```
+Callable<String> helloCallable1(String name){
+        String hello = "hello";
+        return () -> (hello + "," + name);
+    }
+    
+//这段代码在JAVA 7中编译报错， JAVA 8则正确
+Callable<String> helloCallable2(String name){
+    String hello = "hello";
+    return new Callable<String>() {
+        @Override
+        public String call() throws Exception {
+            return hello + name;
+        }
+    };
+}
+```
+
+在 Java SE 7 中，编译器对内部类中引用的外部变量（即捕获的变量）要求非常严格：如果捕获的变量没有被声明为final就会产生一个编译错误。现在放宽了这个限制——对于 lambda 表达式和内部类，允许在其中捕获那些符合有效只读（Effectively final）的局部变量。
+
+简单的说，如果一个局部变量在初始化后从未被修改过，那么它就符合有效只读的要求，换句话说，加上`final`后也不会导致编译错误的局部变量就是有效只读变量。
 
