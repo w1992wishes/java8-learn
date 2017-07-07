@@ -459,7 +459,5 @@ Comparator<Person> byAge = Comparator.comparing(p -> p.getAge());
 Comparator<Person> byAge = Comparator.comparing(Person::getAge);
 ```
 
-Person::getAge可以被看作为 lambda 表达式的简写形式。尽管方法引用不一定会把语法变的更紧凑，但它拥有更明确的语义——如果一个Lambda代表的只是“直接调用这个方法”，那最好还是用名称来调用它，而不是去描述如何调用它。
-
-
+Person::getAge可以被看作为 lambda 表达式的简写形式。尽管方法引用不一定会把语法变的更紧凑，但它拥有更明确的语义——如果一个Lambda代表的只是“直接调用这个方法”，那最好还是用名称来调用它，而不是去描述如何调用它。
 
