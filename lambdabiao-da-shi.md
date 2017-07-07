@@ -588,3 +588,59 @@ public class Test6 {
 
 这里java编译器能够根据Lambda表达式上下文推导出参数类型。
 
+Comparator中有一个静态方法comparing\(\)，可以用来进一步简化Lambda表达式（PS: java 8之前是不支持接口中包含静态方法的，java中为了支持Lambda表达式，接口中已经支持静态方法）
+
+```
+static <T, U> Comparator<T> comparing(...)
+```
+
+```
+ //排序
+ Comparator<Apple> c = Comparator.comparing( a -> a.getWeight() );
+ inventory.sort( c );
+```
+
+所以变为：
+
+```
+public class Test7 {
+    public static void main(String[] args) {
+        List<Apple> inventory = new ArrayList<>();
+        inventory.add(new Apple(0.2));
+        inventory.add(new Apple(0.33));
+        inventory.add(new Apple(0.25));
+        inventory.add(new Apple(0.19));
+        inventory.add(new Apple(0.3));
+
+        System.out.println(inventory);
+        //排序 import static java.util.Comparator.comparing
+        inventory.sort(comparing(apple -> apple.getWeight()));
+        //排序后
+        System.out.println(inventory);
+    }
+}
+```
+
+#### 8.4、第四种策略：方法引用
+
+```
+public class Test8 {
+    public static void main(String[] args) {
+        List<Apple> inventory = new ArrayList<>();
+        inventory.add(new Apple(0.2));
+        inventory.add(new Apple(0.33));
+        inventory.add(new Apple(0.25));
+        inventory.add(new Apple(0.19));
+        inventory.add(new Apple(0.3));
+
+        System.out.println(inventory);
+        //排序
+        inventory.sort(comparing(Apple::getWeight));
+        //排序后
+        System.out.println(inventory);
+    }
+}
+```
+
+
+
