@@ -262,7 +262,7 @@ public class Test1 {
 
 #### ![](/assets/1.png)5.2、同样的Lambda，不同的函数式接口
 
-有了目标类型的概念，同一个Lambda表达式就可以与不同的函数式接口联系起来，只要它们的抽象方法签名能够兼容。比如，Callable和PrivilegedAction，这两个接口都代表着什么也不接受且返回一个泛型T的函数。 因此，下面两个赋值是有效的：
+有了目标类型的概念，同一个Lambda表达式就可以与不同的函数式接口联系起来，只要它们的抽象方法签名能够兼容。比如，Callable和PrivilegedAction，这两个接口都代表着什么也不接受且返回一个泛型T的函数。 因此，下面两个赋值是有效的：
 
 ```
 Callable<Integer> c = () -> 42;
@@ -270,7 +270,5 @@ Callable<Integer> c = () -> 42;
 PrivilegedAction<Integer> p = () -> 42;
 ```
 
-第一个赋值的目标类型是Callable&lt;Integer&gt; ， 第二个赋值的目标类型是PrivilegedAction&lt;Integer&gt;。
-
-
+第一个赋值的目标类型是Callable&lt;Integer&gt; ， 第二个赋值的目标类型是PrivilegedAction&lt;Integer&gt;。
 
