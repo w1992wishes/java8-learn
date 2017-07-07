@@ -468,11 +468,16 @@ Person::getAge可以被看作为 lambda 表达式的简写形式。尽管方法�
 * 指向静态方法的方法引用（例如Integer的parseInt方法，写作Integer::parseInt）。
 * 指向任意类型实例方法的方法引用（ 例如String 的length 方法， 写作String::length）。
 * 指向现有对象的实例方法的方法引用（假设局部变量expensiveTransaction用于存放Transaction类型的对象，它支持实例方法getValue，那么可以写expensiveTransaction::getValue）。
-* 对于一个现有构造函数，可以利用它的名称和关键字new来创建它的一个引用：  ClassName::new。
+* 对于一个现有构造函数，可以利用它的名称和关键字new来创建它的一个引用：
+  ClassName::new。
 
 ### 八、Lambda表达式演化实例
 
-现有很多苹果，要对这些苹果按照重量进行排序。（这里用到了JAVA 8中List接口中新增的默认方法sort\(\)）
+现有很多苹果，要对这些苹果按照重量进行排序。（这里用到了JAVA 8中List接口中新增的默认方法sort\(\)）：
+
+```
+default void sort(Comparator<? super E> c)
+```
 
 > 默认方法：
 >
@@ -482,5 +487,104 @@ Person::getAge可以被看作为 lambda 表达式的简写形式。尽管方法�
 >
 > 默认方法利用面向对象的方式向接口增加新的行为。它是一种新的方法：接口方法可以是抽象的或是默认的。默认方法拥有其默认实现，实现接口的类型通过继承得到该默认实现（如果类型没有覆盖该默认实现）。此外，默认方法不是抽象方法，所以可以放心的向函数式接口里增加默认方法，而不用担心函数式接口的单抽象方法限制。
 
+Apple类：
 
+```
+public class Apple{
+    private Double weight;
+
+    public Apple(Double weight){
+        this.weight = weight;
+    }
+
+    public Double getWeight() {
+        return weight;
+    }
+
+    public void setWeight(Double weight) {
+        this.weight = weight;
+    }
+
+    public String toString(){
+        return this.weight + "";
+    }
+}
+```
+
+#### 8.1、第一种策略：实现接口
+
+```
+public class Test4 {
+    public static void main(String[] args) {
+        List<Apple> inventory = new ArrayList<>();
+        inventory.add(new Apple(0.2));
+        inventory.add(new Apple(0.33));
+        inventory.add(new Apple(0.25));
+        inventory.add(new Apple(0.19));
+        inventory.add(new Apple(0.3));
+
+        System.out.println(inventory);
+        //排序
+        inventory.sort(new AppleComparaor());
+        //排序后
+        System.out.println(inventory);
+    }
+}
+
+class AppleComparaor implements Comparator<Apple>{
+    @Override
+    public int compare(Apple a1, Apple a2) {
+        return a1.getWeight().compareTo(a2.getWeight());
+    }
+}
+```
+
+#### 8.2、第二种策略：使用匿名内部类
+
+```
+public class Test5 {
+    public static void main(String[] args) {
+        List<Apple> inventory = new ArrayList<>();
+        inventory.add(new Apple(0.2));
+        inventory.add(new Apple(0.33));
+        inventory.add(new Apple(0.25));
+        inventory.add(new Apple(0.19));
+        inventory.add(new Apple(0.3));
+
+        System.out.println(inventory);
+        //排序
+        inventory.sort(new Comparator<Apple>() {
+            @Override
+            public int compare(Apple a1, Apple a2) {
+                return a1.getWeight().compareTo(a2.getWeight());
+            }
+        });
+        //排序后
+        System.out.println(inventory);
+    }
+}
+```
+
+#### 8.3、第三种策略：使用Lambda表达式
+
+```
+public class Test6 {
+    public static void main(String[] args) {
+        List<Apple> inventory = new ArrayList<>();
+        inventory.add(new Apple(0.2));
+        inventory.add(new Apple(0.33));
+        inventory.add(new Apple(0.25));
+        inventory.add(new Apple(0.19));
+        inventory.add(new Apple(0.3));
+
+        System.out.println(inventory);
+        //排序
+        inventory.sort( (a1, a2) -> a1.getWeight().compareTo(a2.getWeight()));
+        //排序后
+        System.out.println(inventory);
+    }
+}
+```
+
+这里java编译器能够根据Lambda表达式上下文推导出参数类型。
 
