@@ -242,3 +242,25 @@ if(menu.stream().anyMatch(Dish::isVegetarian)){
 
 anyMatch方法返回一个boolean，因此是一个终端操作。
 
+##### 3.3.2、allMatch
+
+allMatch方法接收一个Predicate，用以匹配流中是否所有素都符合Predicate。
+
+```
+boolean isHealthy = menu.stream()
+                        .allMatch(d -> d.getCalories() < 1000);
+```
+
+allMatch也是一个终端操作。
+
+##### 3.3.3、noneMatch
+
+和allMatch相反
+
+```
+boolean isHealthy = menu.stream()
+                        .noneMatch(d -> d.getCalories() >= 1000);
+```
+
+
+
