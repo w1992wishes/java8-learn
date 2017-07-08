@@ -228,5 +228,17 @@ List<Integer> result = outer.stream().flatMap(inner -> inner.stream().map(i -> i
 System.out.println(result);
 ```
 
+#### 3.3、查找和匹配
 
+##### 3.3.1、anyMatch
+
+anyMatch方法接收一个Predicate，用以匹配流中是否至少有一个元素符合Predicate。
+
+```
+if(menu.stream().anyMatch(Dish::isVegetarian)){
+    System.out.println("The menu is (somewhat) vegetarian friendly!!");
+}
+```
+
+anyMatch方法返回一个boolean，因此是一个终端操作。
 
