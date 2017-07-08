@@ -285,5 +285,14 @@ menu.stream()
     .findAny();
 ```
 
+##### 3.3.5、findFirst
+
+```
+menu.stream()
+    .filter(Dish::isVegetarian)
+    .findAny()
+    .ifPresent(d -> System.out.println(d.getName());
+```
+
 
 
