@@ -151,7 +151,7 @@ menu.stream()
 
 ##### 2.5.2、终端操作
 
-终端操作会从流的流水线生成结果。
+##### 终端操作会从流的流水线生成结果。
 
 ### 三、使用流
 
@@ -182,6 +182,26 @@ List<Dish> vegetarianMenu = menu.stream()
 ##### 3.1.4、跳过流
 
 流还支持skip\(n\)方法，返回一个扔掉了前n个元素的流。如果流中元素不足n个，则返回一个空流。limit\(n\)和skip\(n\)是互补的！
+
+#### 3.2、映射
+
+一个非常常见的数据处理套路就是从某些对象中选择信息。比如在SQL里，你可以从表中选择一列。Stream API也通过map和flatMap方法提供了类似的工具。
+
+##### 3.2.1、map
+
+流支持map方法，它会接受一个Function作为参数。这个Function会被应用到每个元素上，并将其映射成一个新的元素。
+
+例如，把方法引用Dish::getName传给了map方法，来提取流中菜肴的名称：
+
+```
+List<String> dishNames = menu.stream()
+                             .map(Dish::getName)
+                             .collect(toList());
+```
+
+因为getName方法返回一个String，所以map方法输出的流的类型就是Stream&lt;String&gt;。
+
+##### 3.2.2、flatmap
 
 
 
