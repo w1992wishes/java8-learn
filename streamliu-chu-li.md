@@ -262,5 +262,13 @@ boolean isHealthy = menu.stream()
                         .noneMatch(d -> d.getCalories() >= 1000);
 ```
 
+anyMatch、allMatch和noneMatch这三个操作都用到了短路，这就是Java中&&和\|\|运算符短路在流中的版本。
+
+> 短路求值
+>
+> 有些操作不需要处理整个流就能得到结果。例如，假设需要对一个用and连起来的大布尔表达式求值。不管表达式有多长，只需找到一个表达式为false，就可以推断整个表达式将返回false，所以用不着计算整个表达式。这就是短路。对于流而言，某些操作（例如allMatch、anyMatch、noneMatch、findFirst和findAny）不用处理整个流就能得到结果。只要找到一个元素，就可以有结果了。同样，limit也是一个短路操作：它只需要创建一个给定大小的流，而用不着处理流中所有的元素。在碰到无限大小的流的时候，这种操作就有用了：它们可以把无限流变成有限流。
+
+
+
 
 
