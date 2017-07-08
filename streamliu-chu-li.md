@@ -159,9 +159,11 @@ menu.stream()
 
 #### 3.1、筛选和切片
 
+##### 3.1.1、用Predicate筛选
+
 Streams接口支持filter方法，该操作会接受一个Predicate作为参数，并返回一个包括所有符合谓词的元素的流。
 
-例如，，筛选出所有素菜，创建一张素食菜单：
+例如，筛选出所有素菜，创建一张素食菜单：
 
 ```
 List<Dish> vegetarianMenu = menu.stream()
@@ -169,5 +171,17 @@ List<Dish> vegetarianMenu = menu.stream()
                                 .collect(toList());
 ```
 
-流还支持一个叫作distinct的方法，它会返回一个元素各异（根据流所生成元素的hashCode和equals方法实现）的流。同SQL中的distinct一样。
+##### 3.1.2、distinct
+
+流还支持一个叫作distinct的方法，它会返回一个元素各异（根据流所生成元素的hashCode和equals方法实现）的流。发现没，同SQL中的distinct一样。
+
+##### 3.1.3、截断流
+
+流支持limit\(n\)方法，该方法会返回一个不超过给定长度的流。所需的长度作为参数传递给limit。如果流是有序的，则最多会返回前n个元素。
+
+##### 3.1.4、跳过流
+
+流还支持skip\(n\)方法，返回一个扔掉了前n个元素的流。如果流中元素不足n个，则返回一个空流。limit\(n\)和skip\(n\)是互补的！
+
+
 
