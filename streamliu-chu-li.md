@@ -575,7 +575,7 @@ java 8 java.util.stream包下Collectors类提供了很多工厂方法（例如to
 
 * 元素分组
 
-*  元素分区
+* 元素分区
 
 #### 7.1、归约和汇总
 
@@ -617,6 +617,24 @@ String shortMenu = menu.stream().map(Dish::getName).collect(joining());
 ```
 String shortMenu = menu.stream().map(Dish::getName).collect(joining(", "));
 ```
+
+##### 7.1.5、广义的归约汇总
+
+前面的几种方法都可以看出reducing工厂方法定义的归约过程的特殊情况而已，Collectors.reducing工厂方法是所有这些特殊情况的一般化。
+
+可以用reducing方法创建的收集器来计算菜单的总热量：
+
+```
+int totalCalories = menu.stream().collect(reducing(0, Dish::getCalories, (i, j) -> i + j));
+```
+
+reducing需要三个参数。
+
+* 第一个参数是归约操作的起始值，也是流中没有元素时的返回值，所以很显然对于数值  和而言0是一个合适的值。
+
+*  第二个参数是一个转换函数，将菜肴转换成一个表示其所含热量的int。
+
+*  第三个参数是一个BinaryOperator，将两个项目累积成一个同类型的值。这里它就是  对两个int求和。
 
 
 
