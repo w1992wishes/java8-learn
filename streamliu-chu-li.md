@@ -315,6 +315,12 @@ java 8:
 int sum = numbers.stream().reduce(0, (a, b) -> a + b);
 ```
 
+在Java 8中，Integer类现在有了一个静态的sum方法来对两个数求和，所以可以用方法引用表达：
+
+```
+int sum = numbers.stream().reduce(0, Integer::sum);
+```
+
 reduce接受两个参数：
 
 * 一个初始值，这里是0；
@@ -322,6 +328,29 @@ reduce接受两个参数：
 * 一个BinaryOperator&lt;T&gt;来将两个元素结合起来产生一个新值，这里用的是lambda \(a, b\) -&gt; a + b。
 
 这里Lambda反复结合每个元素，直到流被归约成一个值。
+
+##### 3.4.2、最大值和最小值
+
+reduce接受两个参数：
+
+* 一个初始值
+
+* 一个Lambda来把两个流元素结合起来并产生一个新值
+
+所以也可以用来求最大值和最小值。
+
+java 8中Integer中也有max和min方法：
+
+```
+Optional<Integer> max = numbers.stream().reduce(Integer::max);
+
+
+Optional<Integer> min = numbers.stream().reduce(Integer::min);
+```
+
+### 四、简单实践
+
+
 
 
 
