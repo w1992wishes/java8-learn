@@ -630,11 +630,20 @@ int totalCalories = menu.stream().collect(reducing(0, Dish::getCalories, (i, j) 
 
 reducing需要三个参数。
 
-* 第一个参数是归约操作的起始值，也是流中没有元素时的返回值，所以很显然对于数值  和而言0是一个合适的值。
+* 第一个参数是归约操作的起始值，也是流中没有元素时的返回值，所以很显然对于数值  
+  和而言0是一个合适的值。
 
-*  第二个参数是一个转换函数，将菜肴转换成一个表示其所含热量的int。
+* 第二个参数是一个转换函数，将菜肴转换成一个表示其所含热量的int。
 
-*  第三个参数是一个BinaryOperator，将两个项目累积成一个同类型的值。这里它就是  对两个int求和。
+* 第三个参数是一个BinaryOperator，将两个项目累积成一个同类型的值。这里它就是  
+  对两个int求和。
+
+用reducing来找到热量最高的菜：
+
+```
+Optional<Dish> mostCalorieDish =
+menu.stream().collect(reducing((d1, d2) -> d1.getCalories() > d2.getCalories() ? d1 : d2));
+```
 
 
 
