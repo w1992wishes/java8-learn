@@ -620,9 +620,9 @@ String shortMenu = menu.stream().map(Dish::getName).collect(joining(", "));
 
 ##### 7.1.5、广义的归约汇总
 
-前面的几种方法都可以看出reducing工厂方法定义的归约过程的特殊情况而已，Collectors.reducing工厂方法是所有这些特殊情况的一般化。
+#### 前面的几种方法都可以看出reducing工厂方法定义的归约过程的特殊情况而已，Collectors.reducing工厂方法是所有这些特殊情况的一般化。
 
-可以用reducing方法创建的收集器来计算菜单的总热量：
+#### 可以用reducing方法创建的收集器来计算菜单的总热量：
 
 ```
 int totalCalories = menu.stream().collect(reducing(0, Dish::getCalories, (i, j) -> i + j));
@@ -630,12 +630,12 @@ int totalCalories = menu.stream().collect(reducing(0, Dish::getCalories, (i, j) 
 
 reducing需要三个参数。
 
-* 第一个参数是归约操作的起始值，也是流中没有元素时的返回值，所以很显然对于数值  
+* 第一个参数是归约操作的**起始值**，也是流中没有元素时的返回值，所以很显然对于数值  
   和而言0是一个合适的值。
 
-* 第二个参数是一个转换函数，将菜肴转换成一个表示其所含热量的int。
+* 第二个参数是一个**转换函数**，将菜肴转换成一个表示其所含热量的int。
 
-* 第三个参数是一个BinaryOperator，将两个项目累积成一个同类型的值。这里它就是  
+* 第三个参数是一个**BinaryOperator**，将两个项目累积成一个同类型的值。这里它就是  
   对两个int求和。
 
 用reducing来找到热量最高的菜：
@@ -643,6 +643,61 @@ reducing需要三个参数。
 ```
 Optional<Dish> mostCalorieDish =
 menu.stream().collect(reducing((d1, d2) -> d1.getCalories() > d2.getCalories() ? d1 : d2));
+```
+
+可以把单参数reducing工厂方法创建的收集器看作三参数方法的特殊情况，第一个项目作为起点，把恒等函数（即一个函数仅仅是返回其输入参数）作为一个转换函数。
+
+#### 7.2、分组
+
+java 8也提供了类似数据库的分组操作。
+
+现假设把菜单中的菜按照类型进行分类，用Collectors.groupingBy工厂方法返回的收集器就可以轻松地完成这项任务：
+
+```
+Map<Dish.Type, List<Dish>> dishesByType = menu.stream().collect(groupingBy(Dish::getType));
+```
+
+再假设想把热量不到400卡路里的菜划分为“低热量”（diet），热量400到700卡路里的菜划为“普通”（normal），高于700卡路里的划为“高热量”（fat）。因为没有Dish类中没有该分类可用，不能用方法引用，可以用Lambda表达式：
+
+```
+public enum CaloricLevel { DIET, NORMAL, FAT }
+
+Map<CaloricLevel, List<Dish>> dishesByCaloricLevel = menu.stream().collect(
+    groupingBy(dish -> {
+        if (dish.getCalories() <= 400) return CaloricLevel.DIET;
+        else if (dish.getCalories() <= 700) return CaloricLevel.NORMAL;
+        else return CaloricLevel.FAT;
+    } ));
+```
+
+还可以进行多级分组：
+
+```
+Map<Dish.Type, Map<CaloricLevel, List<Dish>>> dishesByTypeCaloricLevel =
+menu.stream().collect(
+    groupingBy(Dish::getType,
+        groupingBy(dish -> {
+            if (dish.getCalories() <= 400) return CaloricLevel.DIET;
+            else if (dish.getCalories() <= 700) return CaloricLevel.NORMAL;
+            else return CaloricLevel.FAT;
+        } )
+    )
+);
+```
+
+这在java 8之前，估计就只能循套循环才能实现，代码绝没有现在这么明白清晰。
+
+groupingBy的第二个参数不只是可以用groupingBy，还可以是别的Collectors：
+
+```
+// 每种菜品有多少个
+Map<Dish.Type, Long> typesCount = menu.stream().collect(groupingBy(Dish::getType, counting()));
+
+// 每种菜品卡路里最高的菜，结果是一个map，以Dish的类型作为键，Optional<Dish>作为值
+Map<Dish.Type, Optional<Dish>> mostCaloricByType = 
+menu.stream().collect(
+    groupingBy(Dish::getType,
+        maxBy(comparingInt(Dish::getCalories))));
 ```
 
 
