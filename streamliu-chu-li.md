@@ -294,5 +294,34 @@ menu.stream()
     .ifPresent(d -> System.out.println(d.getName());
 ```
 
+#### 3.4、归约
+
+reduce操作可以用来进行一些复杂的查询，比如“计算菜单中的总卡路里”或“菜单中卡路里最高的菜是哪一个”。此类查询需要将流中所有元素反复结合起来，得到一个值，比如一个Integer。这样的查询可以被归类为归约操作（将流归约成一个值）。
+
+##### 3.4.1、求和
+
+java 8之前求和：
+
+```
+int sum = 0;
+for (int x : numbers) {
+    sum += x;
+}
+```
+
+java 8:
+
+```
+int sum = numbers.stream().reduce(0, (a, b) -> a + b);
+```
+
+reduce接受两个参数：
+
+* 一个初始值，这里是0；
+
+* 一个BinaryOperator&lt;T&gt;来将两个元素结合起来产生一个新值，这里用的是lambda \(a, b\) -&gt; a + b。
+
+这里Lambda反复结合每个元素，直到流被归约成一个值。
+
 
 
