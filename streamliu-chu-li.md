@@ -541,3 +541,31 @@ catch(IOException e){
 
 使用Files.lines得到一个流，其中的每个元素都是给定文件中的一行line，对line调用split方法将行拆分成单词。最后，把distinct和count方法链接起来，数数流中有多少各不相同的单词。
 
+#### 6.4、由函数生成流
+
+Stream API提供了两个静态方法来从函数生成流：Stream.iterate和Stream.generate。
+
+这两个操作可以创建所谓的无限流：不像从固定集合创建的流那样有固定大小的流，它们创建的流会用给定的函数按需创建值，因此可以无穷无尽地计算下去！
+
+##### 6.4.1、iterate
+
+```
+Stream.iterate(0, n -> n + 2)
+      .limit(10)
+      .forEach(System.out::println);
+```
+
+iterate方法接受一个初始值，还有一个依次应用在每个产生的新值上的Lambda（UnaryOperator&lt;t&gt;类型）。
+
+用Lambda n -&gt; n + 2，返回的是前一个元素加上2。
+
+##### 6.4.2、generate
+
+```
+Stream.generate(Math::random)
+      .limit(5)
+      .forEach(System.out::println);
+```
+
+generate不是依次对每个新生成的值应用函数的。它接受一个Supplier&lt;T&gt;类型的Lambda提供新的值。
+
