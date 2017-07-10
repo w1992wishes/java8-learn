@@ -350,7 +350,124 @@ Optional<Integer> min = numbers.stream().reduce(Integer::min);
 
 ### 四、简单实践
 
+现有Customer和Orders两个类，代码如下：
 
+```
+class Customer{
+    private String name;
+    private int age;
+
+    public Customer(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+}
+
+class Order{
+    private Customer customer;
+    private int year;
+    private int value;
+
+    public Order(Customer customer, int year, int value) {
+        this.customer = customer;
+        this.year = year;
+        this.value = value;
+    }
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
+
+    public int getYear() {
+        return year;
+    }
+
+    public void setYear(int year) {
+        this.year = year;
+    }
+
+    public int getValue() {
+        return value;
+    }
+
+    public void setValue(int value) {
+        this.value = value;
+    }
+}
+```
+
+问题如下：
+
+#### 4.1、查询2014年后的订单，并按交易额排序。
+
+```
+public class Test2 {
+    public static void main(String[] args) {
+        Customer customer1 = new Customer("wawa",8);
+        Customer customer2 = new Customer("xiaoli", 11);
+        Customer customer3 = new Customer("dahuang", 22);
+        Customer customer4 = new Customer("cangbai", 14);
+        Customer customer5 = new Customer("cainiao", 25);
+
+        List<Order> orders = Arrays.asList(
+                new Order(customer1, 2015, 3000),
+                new Order(customer2, 22017, 4000),
+                new Order(customer3, 2011, 111),
+                new Order(customer4, 2014, 1000),
+                new Order(customer5, 2016, 33333)
+        );
+
+        orders.stream()
+                .filter(order -> order.getYear() >= 2014)
+                .sorted(Comparator.comparing(Order::getValue))
+                .collect(toList());
+    }
+}
+```
+
+#### 4.2、返回所有顾客的姓名字符串，按字母顺序排序
+
+```
+String results = orders.stream()
+                .map(order -> order.getCustomer().getName())
+                .distinct()
+                .sorted()
+                .reduce("", (n1, n2) -> n1 + n2);
+```
+
+#### 4.3、有没有订单金额大于10000
+
+```
+boolean results = orders.stream().anyMatch( order -> order.getValue() > 10000);
+```
+
+#### 4.4、打印所有顾客姓名
+
+```
+orders.stream().forEach(order -> System.out.println(order.getCustomer().getName()));
+```
+
+### 五、数值流
 
 
 
