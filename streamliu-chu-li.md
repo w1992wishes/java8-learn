@@ -498,8 +498,6 @@ Stream<Integer> stream = intStream.boxed();
 
 ### 六、构建流
 
-最后讲讲怎么构建流。
-
 #### 6.1、由值创建流
 
 静态方法Stream.of，通过显式值创建一个流。它可以接受任意数量的参数。
