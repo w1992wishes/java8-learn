@@ -749,6 +749,8 @@ Map<Boolean, Dish> mostCaloricPartitionedByVegetarian =
                 maxBy(comparingInt(Dish::getCalories)),
                 Optional::get)));
 ```
+
 ### 八、并行流
+
 
 
