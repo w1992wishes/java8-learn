@@ -700,5 +700,16 @@ menu.stream().collect(
         maxBy(comparingInt(Dish::getCalories))));
 ```
 
+可以把收集器返回的结果转换为另一种类型，这里Optional::get操作放在这里是安全的，因为reducing收集器永远都不会返回Optional.empty\(\)。groupingBy收集器只有在应用分组条件后，第一次在流中找到某个键对应的元素时才会把键加入分组Map中。
+
+```
+Map<Dish.Type, Dish> mostCaloricByType =
+menu.stream()
+    .collect(groupingBy(Dish::getType,
+        collectingAndThen(
+            maxBy(comparingInt(Dish::getCalories)),
+            Optional::get)));
+```
+
 
 
