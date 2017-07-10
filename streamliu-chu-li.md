@@ -469,5 +469,30 @@ orders.stream().forEach(order -> System.out.println(order.getCustomer().getName(
 
 ### 五、数值流
 
+```
+int calories = menu.stream()
+            .map(Dish::getCalories)
+            .reduce(0, Integer::sum);
+```
 
+这段代码有一个问题，它有一个暗含的装箱成本。每个Integer都必须拆箱成一个原始类型，再进行求和。
+
+Java 8引入了三个原始类型特化流接口来解决这个问题：IntStream、DoubleStream和LongStream，分别将流中的元素特化为int、long和double，从而避免了暗含的装箱成本。
+
+```
+int calories = menu.stream()
+             .mapToInt(Dish::getCalories)
+             .sum();
+```
+
+mapToInt会从每道菜中提取热量（用一个Integer表示），并返回一个IntStream。
+
+数值流也可以转换为对象流：
+
+```
+IntStream intStream = menu.stream().mapToInt(Dish::getCalories);
+Stream<Integer> stream = intStream.boxed();
+```
+
+补充：IntStream和LongStream有range和rangeClosed两个方法，可以生产一段范围内的数值流，其中range方法不包含结尾值，而rangeClosed包含结尾值。
 
