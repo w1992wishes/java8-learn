@@ -567,3 +567,7 @@ Stream.generate(Math::random)
 
 generate不是依次对每个新生成的值应用函数的。它接受一个Supplier&lt;T&gt;类型的Lambda提供新的值。
 
+### 七、用流收集数据
+
+
+
