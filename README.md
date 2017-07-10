@@ -16,7 +16,7 @@ java 9即将发布，在这之前，还是先把java 8 的新特性总结一下�
 
 * **Optional**
 
-* **Stream**
+* [**Stream**](/streamliu-chu-li.md)
 
 * **Date/Time API \(JSR 310\)**
 
