@@ -455,7 +455,7 @@ String results = orders.stream()
                 .reduce("", (n1, n2) -> n1 + n2);
 ```
 
-#### 4.3、有没有订单金额大于10000
+### 4.3、有没有订单金额大于10000
 
 ```
 boolean results = orders.stream().anyMatch( order -> order.getValue() > 10000);
@@ -495,4 +495,49 @@ Stream<Integer> stream = intStream.boxed();
 ```
 
 补充：IntStream和LongStream有range和rangeClosed两个方法，可以生产一段范围内的数值流，其中range方法不包含结尾值，而rangeClosed包含结尾值。
+
+### 六、构建流
+
+最后讲讲怎么构建流。
+
+#### 6.1、由值创建流
+
+静态方法Stream.of，通过显式值创建一个流。它可以接受任意数量的参数。
+
+```
+Stream<String> stream = Stream.of("Java 8 ", "Lambdas ", "In ", "Action");
+stream.map(String::toUpperCase).forEach(System.out::println);
+```
+
+可以使用empty得到一个空流。
+
+```
+Stream<String> emptyStream = Stream.empty();
+```
+
+#### 6.2、由数组创建流
+
+静态方法Arrays.stream从数组创建一个流，它接受一个数组作为参数。
+
+```
+int[] numbers = {2, 3, 5, 7, 11, 13};
+int sum = Arrays.stream(numbers).sum();//是一个IntStream
+```
+
+#### 6.3、由文件生成流
+
+java.nio.file.Files中的很多静态方法都会返回一个流。例如，Files.lines，它会返回一个由指定文件中的各行构成的字符串流。
+
+```
+long uniqueWords = 0;
+try(Stream<String> lines = Files.lines(Paths.get("data.txt"), Charset.defaultCharset())){
+    uniqueWords = lines.flatMap(line -> Arrays.stream(line.split(" ")))
+                        .distinct()
+                        .count();
+}
+catch(IOException e){
+}
+```
+
+使用Files.lines得到一个流，其中的每个元素都是给定文件中的一行line，对line调用split方法将行拆分成单词。最后，把distinct和count方法链接起来，数数流中有多少各不相同的单词。
 
