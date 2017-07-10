@@ -713,19 +713,42 @@ menu.stream()
 
 其工作流程大概如下：
 
-* 收集器用虚线表示，groupingBy是最外层，根据菜肴的类型把菜单流分组，得到三  个子流。
+* 收集器用虚线表示，groupingBy是最外层，根据菜肴的类型把菜单流分组，得到三  
+  个子流。
 
-*  groupingBy收集器包裹着collectingAndThen收集器，因此分组操作得到的每个子流  都用这第二个收集器做进一步归约。
+* groupingBy收集器包裹着collectingAndThen收集器，因此分组操作得到的每个子流  
+  都用这第二个收集器做进一步归约。
 
-*  collectingAndThen收集器又包裹着第三个收集器maxBy。
+* collectingAndThen收集器又包裹着第三个收集器maxBy。
 
-*  随后由归约收集器进行子流的归约操作，然后包含它的collectingAndThen收集器会对  其结果应用Optional:get转换函数。
+* 随后由归约收集器进行子流的归约操作，然后包含它的collectingAndThen收集器会对  
+  其结果应用Optional:get转换函数。
 
-* 对三个子流分别执行这一过程并转换而得到的三个值，也就是各个类型中热量最高的  Dish，将成为groupingBy收集器返回的Map中与各个分类键（Dish的类型）相关联的值。
+* 对三个子流分别执行这一过程并转换而得到的三个值，也就是各个类型中热量最高的  
+  Dish，将成为groupingBy收集器返回的Map中与各个分类键（Dish的类型）相关联的值。
 
 ![](/assets/4.png)
 
+#### 7.3、分区
 
+分区是分组的特殊情况：由一个谓词（返回一个布尔值的函数）作为分类函数。
+
+把菜单按照素食和非素食分开：
+
+```
+Map<Boolean, List<Dish>> partitionedMenu = menu.stream().collect(partitioningBy(Dish::isVegetarian));
+```
+
+找到素食和非素食中热量最高的菜：
+
+```
+Map<Boolean, Dish> mostCaloricPartitionedByVegetarian =
+    menu.stream().collect(
+        partitioningBy(Dish::isVegetarian,
+            collectingAndThen(
+                maxBy(comparingInt(Dish::getCalories)),
+                Optional::get)));
+```
 
 
 
