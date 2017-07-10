@@ -455,7 +455,7 @@ String results = orders.stream()
                 .reduce("", (n1, n2) -> n1 + n2);
 ```
 
-### 4.3、有没有订单金额大于10000
+#### 4.3、有没有订单金额大于10000
 
 ```
 boolean results = orders.stream().anyMatch( order -> order.getValue() > 10000);
@@ -568,6 +568,55 @@ Stream.generate(Math::random)
 generate不是依次对每个新生成的值应用函数的。它接受一个Supplier&lt;T&gt;类型的Lambda提供新的值。
 
 ### 七、用流收集数据
+
+java 8 java.util.stream包下Collectors类提供了很多工厂方法（例如toList）用来创建Collectors。这些方法主要提供了三大功能：
+
+* 将流元素归约和汇总为一个值
+
+* 元素分组
+
+*  元素分区
+
+#### 7.1、归约和汇总
+
+##### 7.1.1、计算流中共有多少元素counting
+
+```
+long howManyDishes = menu.stream().collect(Collectors.counting());
+```
+
+##### 7.1.2、查找流中的最大值和最小值maxBy/minBy
+
+```
+Comparator<Dish> dishCaloriesComparator = Comparator.comparingInt(Dish::getCalories);
+Optional<Dish> mostCalorieDish = menu.stream().collect(maxBy(dishCaloriesComparator));
+```
+
+因为menu可能为空，所以返回Optional&lt;Dish&gt;。Optional下章再作介绍。
+
+##### 7.1.3、汇总summingInt
+
+```
+//菜单列表的总热量
+int totalCalories = menu.stream().collect(summingInt(Dish::getCalories));
+
+//菜单列表的平均热量
+double avgCalories = menu.stream().collect(averagingInt(Dish::getCalories));
+```
+
+##### 7.1.4、连接字符串joining
+
+joining工厂方法返回的收集器会把对流中每一个对象应用toString方法得到的所有字符串连接成一个字符串：
+
+```
+String shortMenu = menu.stream().map(Dish::getName).collect(joining());
+```
+
+但这样的字符串可读性不好，joining工厂方法有一个重载版本可以接受元素之间的分界符：
+
+```
+String shortMenu = menu.stream().map(Dish::getName).collect(joining(", "));
+```
 
 
 
