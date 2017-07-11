@@ -20,6 +20,8 @@ fishes.stream()
 
 而且还可以并行处理。
 
+---
+
 ### 二、流简介
 
 #### 2.1、什么是流
@@ -100,7 +102,7 @@ class Dish {
 
 > PS：
 >
-> 参考：http://www.importnew.com/24250.html
+> 参考：[http://www.importnew.com/24250.html](http://www.importnew.com/24250.html)
 >
 > 对于简单操作，比如最简单的遍历，Stream串行API性能明显差于显示迭代，但并行的Stream API能够发挥多核特性。
 >
@@ -160,6 +162,8 @@ menu.stream()
 ##### 2.5.2、终端操作
 
 ##### 终端操作会从流的流水线生成结果。
+
+---
 
 ### 三、使用流
 
@@ -356,6 +360,8 @@ Optional<Integer> max = numbers.stream().reduce(Integer::max);
 Optional<Integer> min = numbers.stream().reduce(Integer::min);
 ```
 
+---
+
 ### 四、简单实践
 
 现有Customer和Orders两个类，代码如下：
@@ -475,6 +481,8 @@ boolean results = orders.stream().anyMatch( order -> order.getValue() > 10000);
 orders.stream().forEach(order -> System.out.println(order.getCustomer().getName()));
 ```
 
+---
+
 ### 五、数值流
 
 ```
@@ -503,6 +511,8 @@ Stream<Integer> stream = intStream.boxed();
 ```
 
 补充：IntStream和LongStream有range和rangeClosed两个方法，可以生产一段范围内的数值流，其中range方法不包含结尾值，而rangeClosed包含结尾值。
+
+---
 
 ### 六、构建流
 
@@ -574,6 +584,8 @@ Stream.generate(Math::random)
 ```
 
 generate不是依次对每个新生成的值应用函数的。它接受一个Supplier&lt;T&gt;类型的Lambda提供新的值。
+
+---
 
 ### 七、用流收集数据
 
@@ -758,6 +770,8 @@ Map<Boolean, Dish> mostCaloricPartitionedByVegetarian =
                 Optional::get)));
 ```
 
+---
+
 ### 八、并行流
 
 可以用parallel方法将串行流转为并行流：
@@ -853,4 +867,118 @@ Parallel sum done in: 168 msecs
 * 很难把iterate分成多个独立块来并行执行。（iterate很难分割成能够独立执行的小块，因为每次应用这个函数都要依赖前一次应用的结果。）
 
 整张数字列表在归纳过程开始时没有准备好，因而无法有效地把流划分为小块来并行处理。把流标记成并行，其实是给顺序处理增加了开销，它还要把每次求和操作分到一个不同的线程上。
+
+这说明了并行编程可能很复杂，有时候甚至有点违反直觉。如果用得不对（比如采用了一个不易并行化的操作，如iterate），它甚至可能让程序的整体性能更差。
+
+#### 8.2、使用更有针对性的方法重新测试
+
+```
+public class ParallelStreams {
+    public static long measureSumPerf(Function<Long, Long> adder, long n) {
+        long fastest = Long.MAX_VALUE;
+        for (int i = 0; i < 10; i++) {
+            long start = System.nanoTime();
+            long sum = adder.apply(n);
+            long duration = (System.nanoTime() - start) / 1_000_000;
+// System.out.println("Result: " + sum);
+            if (duration < fastest) fastest = duration;
+        }
+        return fastest;
+    }
+
+    //串行流
+    public static long sequentialSum(long n) {
+        return Stream.iterate(1L, i -> i + 1)
+                .limit(n)
+                .reduce(0L, Long::sum);
+    }
+
+    // 传统for循环
+    public static long iterativeSum(long n) {
+        long result = 0;
+        for (long i = 1L; i <= n; i++) {
+            result += i;
+        }
+        return result;
+    }
+
+    //并行流
+    public static long parallelSum(long n) {
+        return Stream.iterate(1L, i -> i + 1)
+                .limit(n)
+                .parallel()
+                .reduce(0L, Long::sum);
+    }
+
+    //使用更有针对性的方法 串行流
+    public static long rangedSum(long n) {
+        return LongStream.rangeClosed(1, n)
+                .reduce(0L, Long::sum);
+    }
+
+    //使用更有针对性的方法 并行流
+    public static long parallelRangedSum(long n) {
+        return LongStream.rangeClosed(1, n)
+                .parallel()
+                .reduce(0L, Long::sum);
+    }
+
+    public static void main(String[] args) {
+        System.out.println(Runtime.getRuntime().availableProcessors());
+        System.out.println("Sequential sum done in:" +
+                measureSumPerf(ParallelStreams::sequentialSum, 10_000_000) + " msecs");
+        System.out.println("Iterative sum done in:" +
+                measureSumPerf(ParallelStreams::iterativeSum, 10_000_000) + " msecs");
+        System.out.println("Parallel sum done in: " +
+                measureSumPerf(ParallelStreams::parallelSum, 10_000_000) + " msecs" );
+        System.out.println("Sequential ranged sum done in: " +
+                measureSumPerf(ParallelStreams::rangedSum, 10_000_000) + " msecs" );
+        System.out.println("Parallel ranged sum done in: " +
+                measureSumPerf(ParallelStreams::parallelRangedSum, 10_000_000) + " msecs" );
+    }
+}
+```
+
+结果是：
+
+```
+4
+Sequential sum done in:114 msecs
+Iterative sum done in:2 msecs
+Parallel sum done in: 164 msecs
+Sequential ranged sum done in: 4 msecs
+Parallel ranged sum done in: 1 msecs
+```
+
+串行流与for-each差距已经不大，而并行流效率则超过了for-each，是因为rangeClosed与iterate相比有两个优点：
+
+* LongStream.rangeClosed直接产生原始类型的long数字，没有装箱拆箱的开销。
+
+* LongStream.rangeClosed会生成数字范围，很容易拆分为独立的小块。
+
+> PS：并行化是有代价的。并行化过程本身需要对流做递归划分，把每个子流的归纳操作分配到不同的线程，然后把这些操作的结果合并成一个值。但在多个内核之间移动数据的代价也可能很大，所以很重要的一点是要保证在内核中并行执行工作的时间比在内核之间传输数据的时间长。
+>
+> 同时也要注意，**并行流也应该避免共享可变状态**。
+
+#### 8.3、高效使用并行流的建议
+
+* 最靠谱的，测试，如果存在疑问，就测试。
+* 尽量使用IntStream、LongStream、DoubleStream这些流避免装箱。
+* 有些操作本身在并行流上的性能就比顺序流差。特别是limit和findFirst等依赖于元素顺序的操作，它们在并行流上执行的代价非常大。
+* 对于较小的数据量，选择并行流几乎从来都不是一个好的决定。
+* 要考虑流背后的数据结构是否易于分解。例如，ArrayList的拆分效率比LinkedList高得多，因为前者用不着遍历就可以平均拆分，而后者则必须遍历。
+* 还要考虑终端操作中合并步骤的代价是大是小。
+
+**附上一张“流的数据源和可分解性”相关表：**
+
+| 源  |  可分解性 |
+| :--- | :--- |
+| ArrayList | 极佳 |
+| LinkedList | 差 |
+| IntStream.range | 极佳 |
+| Stream.iterate | 差 |
+| HashSet | 好 |
+| TreeSet | 好 |
+
+
 
