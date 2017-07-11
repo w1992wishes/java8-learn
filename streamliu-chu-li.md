@@ -971,12 +971,12 @@ Parallel ranged sum done in: 1 msecs
 
 **附上一张“流的数据源和可分解性”相关表：**
 
-| 源  |  可分解性 |
+| 源 | 可分解性 |
 | :--- | :--- |
 | ArrayList | 极佳 |
 | LinkedList | 差 |
 | IntStream.range | 极佳 |
-| Stream.iterate | 差 |
+| Sream.iterate | 差 |
 | HashSet | 好 |
 | TreeSet | 好 |
 
