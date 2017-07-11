@@ -98,6 +98,14 @@ class Dish {
 * 可复合——更灵活
 * 可并行——性能更好
 
+> PS：
+>
+> 参考：http://www.importnew.com/24250.html
+>
+> 对于简单操作，比如最简单的遍历，Stream串行API性能明显差于显示迭代，但并行的Stream API能够发挥多核特性。
+>
+> 对于复杂操作，Stream串行API性能可以和手动实现的效果匹敌，在并行执行时Stream API效果远超手动实现。
+
 #### 2.3、流与集合的区别
 
 粗略地说，集合与流之间的差异就在于什么时候进行计算。
@@ -749,6 +757,100 @@ Map<Boolean, Dish> mostCaloricPartitionedByVegetarian =
                 maxBy(comparingInt(Dish::getCalories)),
                 Optional::get)));
 ```
+
 ### 八、并行流
 
+可以用parallel方法将串行流转为并行流：
+
+```
+public static long parallelSum(long n) {
+    return Stream.iterate(1L, i -> i + 1)
+        .limit(n)
+        .parallel() //parallel将串行流变为并行流
+        .reduce(0L, Long::sum);
+}
+```
+
+也可以用sequential将并行流转为并行流：
+
+```
+stream.parallel()
+    .filter(...)
+    .sequential()
+    .map(...)
+    .parallel()
+    .reduce();
+```
+
+但并不是把这两个方法结合起来，就可以更细化地控制在遍历流时哪些操作要并行执行，哪些要串行， 一次调用会影响整个流水线。
+
+#### 8.1、测试一下性能
+
+```
+public class ParallelStreams {
+    public static long measureSumPerf(Function<Long, Long> adder, long n) {
+        long fastest = Long.MAX_VALUE;
+        for (int i = 0; i < 10; i++) {
+            long start = System.nanoTime();
+            long sum = adder.apply(n);
+            long duration = (System.nanoTime() - start) / 1_000_000;
+//            System.out.println("Result: " + sum);
+            if (duration < fastest) fastest = duration;
+        }
+        return fastest;
+    }
+
+    //串行流
+    public static long sequentialSum(long n) {
+        return Stream.iterate(1L, i -> i + 1)
+                .limit(n)
+    }
+
+    // 传统for循环
+    public static long iterativeSum(long n) {
+        long result = 0;
+        for (long i = 1L; i <= n; i++) {
+            result += i;
+        }
+        return result;
+    }
+
+    //并行流
+    public static long parallelSum(long n) {
+        return Stream.iterate(1L, i -> i + 1)
+                .limit(n)
+                .parallel()
+                .reduce(0L, Long::sum);
+    }
+
+    public static void main(String[] args) {
+        System.out.println(Runtime.getRuntime().availableProcessors());
+        System.out.println("Sequential sum done in:" +
+                measureSumPerf(ParallelStreams::sequentialSum, 10_000_000) + " msecs");
+        System.out.println("Iterative sum done in:" +
+                measureSumPerf(ParallelStreams::iterativeSum, 10_000_000) + " msecs");
+        System.out.println("Parallel sum done in: " +
+                measureSumPerf(ParallelStreams::parallelSum, 10_000_000) + " msecs" );
+    }
+}
+```
+
+结果发现，并行流性能最差，串行其次，而传统的for-each性能远远高于流处理：
+
+> PS：这是对基本类型的测试，其实测试一下一个复杂一点的对象，串行流效率不比for-each差，甚至还有超越，而并行流效率更高，且随着核数越多，效率越高。当然在单核中并行流效率很差。
+
+```
+4
+Sequential sum done in:114 msecs
+Iterative sum done in:2 msecs
+Parallel sum done in: 168 msecs
+```
+
+这里实际上有两个问题：
+
+* iterate生成的是装箱的对象，必须拆箱成数字才能求和；
+
+* 很难把iterate分成多个独立块来并行执行。（iterate很难分割成能够独立执行的小块，因为每次应用这个函数都要依赖前一次应用的结果。）
+
+整张数字列表在归纳过程开始时没有准备好，因而无法有效地把流划分为小块来并行处理。把流标记成并行，其实是给顺序处理增加了开销，它还要把每次求和操作分到一个不同的线程上。
 
