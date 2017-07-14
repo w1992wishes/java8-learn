@@ -202,7 +202,7 @@ Optional<Book> optBook = Optional.of(book);
 String bookName = optBook.orElse("Unknown");
 ```
 
-##### 3.3.4、orElseGet
+##### 3.2.4、orElseGet
 
 orElseGet与orElse方法类似，区别在于得到的默认值。orElse方法将传入的字符串作为默认值，orElseGet方法可以接受
 
@@ -213,7 +213,7 @@ Optional<Book> optBook = Optional.of(book);
 String bookName = optBook.orElseGet(() -> "Unknown");
 ```
 
-##### 3.3.5、orElseThrow
+##### 3.2.5、orElseThrow
 
 如果有值则将其返回，否则抛出supplier接口创建的异常。
 
@@ -228,17 +228,52 @@ catch (Throwable ex) {
 }
 ```
 
-##### 3.3.6、map
+##### 3.2.6、map
 
 如果有值，则对其执行调用mapping函数得到返回值。如果返回值不为null，则创建包含mapping返回值的Optional作为map方法返回值，否则返回空Optional。
 
-##### 3.3.7、flatMap
+##### 3.2.7、flatMap
 
 如果有值，为其执行mapping函数返回Optional类型返回值，否则返回空Optional。flatMap与map（Funtion）方法类似，区别在于flatMap中的mapping返回值必须是Optional。调用结束时，flatMap不会对结果用Optional封装。
 
-##### 3.3.8、filter
+##### 3.2.8、filter
 
 如果有值并且满足断言条件返回包含该值的Optional，否则返回空Optional。
+
+#### 3.3、正确使用Optional
+
+##### 3.3.1、不要这样用
+
+```
+Optional<User> user = ……
+if (user.isPresent()) {
+    return user.getOrders();
+} else {
+    return Collections.emptyList();
+}
+```
+
+这和之前没有区别。
+
+##### 3.3.2、这样用
+
+```
+/存在即返回，无则提供默认值
+return user.orElse(UNKNOWN_USER);  //而不是 return user.isPresent() ? user.get() : null;
+
+//存在即返回, 无则由函数来产生
+return user.orElseGet(() -> fetchAUserFromDatabase()); 
+
+//使用map
+return user.map(u -> u.getOrders()).orElse(Collections.emptyList())
+ 
+//上面避免了我们类似 Java 8 之前的做法
+if(user.isPresent()) {
+  return user.get().getOrders();
+} else {
+  return Collections.emptyList();
+}
+```
 
 
 
