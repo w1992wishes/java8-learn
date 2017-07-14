@@ -14,7 +14,7 @@ java 9即将发布，在这之前，还是先把java 8 的新特性总结一下�
 
 * **扩展注解的支持**
 
-* **Optional**
+* [**Optional**](//yong-optional-qu-dai-null.md)
 
 * [**Stream**](/streamliu-chu-li.md)
 
