@@ -114,7 +114,6 @@ class Book{
     }
 
     public String getName() {
-        return name;
     }
 
     public void setName(String name) {
@@ -143,7 +142,39 @@ public String getBookName(Optional<Student> student){
 
 > PS：这里需要注意的是，student .flatMap\(Student::getBag\)....中用了flatMap代替map，是因为map只是把流中的元素映射为流中另一个元素，而这里Student.getBag\(\)返回的是一个Optional&lt;Bag&gt;，如果这里用map，就会报错，无法编译，getBook\(\)是Bag的方法，Optional显然没有。
 >
-> flatMap将流扁平化为一个流的特性在这里
+> flatMap将流扁平化为一个流的特性在这里则正好合适，不理解flatMap的可以再看看上一章节。
 
 ---
+
+### 二、简介
+
+看了上面的例子，对Optional应该有了一个简单的了解。
+
+Optional是java 8引入的用于代替null的一个工具类，目的是为了改善代码的可读性，同时减少烦人的NullPointException。
+
+### 三、使用Optional
+
+#### 3.1、创建Optional对象
+
+##### 3.1.1、Optional.empty
+
+创建一个空的Optional对象。
+
+##### 3.1.2、Optional.of
+
+创建一个非空的Optional对象，如下：
+
+Optional&lt;Bag&gt; optBag = Optional.of\(bag\);
+
+如果bag是一个null，这段代码会立即抛出一个NullPointerException，而不是等到访问car的属性值时才返回一个错误。
+
+##### 3.1.3、Optional.ofNullable
+
+创建一个允许为空的Optional对象，如下：
+
+Optional&lt;Bag&gt; optBag = Optional.of\(bag\);
+
+如果bag是null，那么得到的Optional对象就是个空对象。这时如果试图用optBag .get\(\)方法会报错，可见Optional的使用是有技巧的。
+
+
 
