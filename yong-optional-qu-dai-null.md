@@ -152,6 +152,8 @@ public String getBookName(Optional<Student> student){
 
 Optional是java 8引入的用于代替null的一个工具类，目的是为了改善代码的可读性，同时减少烦人的NullPointException。
 
+---
+
 ### 三、使用Optional
 
 #### 3.1、创建Optional对象
@@ -175,6 +177,68 @@ Optional&lt;Bag&gt; optBag = Optional.of\(bag\);
 Optional&lt;Bag&gt; optBag = Optional.of\(bag\);
 
 如果bag是null，那么得到的Optional对象就是个空对象。这时如果试图用optBag .get\(\)方法会报错，可见Optional的使用是有技巧的。
+
+#### 3.2、Optional的常用方法
+
+##### 3.2.1、get
+
+如果Optional有值则将其返回，否则抛出NoSuchElementException。
+
+##### 3.2.2、ifPresent
+
+该方法接收一个Consumer（Consumer是一个函数式接口，它有个方法，接受一个参数，不返回值），当Optional对象中存在值则调用Consumer，否则不做处理。
+
+```
+Optional<Book> optBook = Optional.of(book);
+optBook.ifPresent(book -> System.out.println(book.getName()));
+```
+
+##### 3.2.3、orElse
+
+如果Optional有值则将其返回，否则返回指定的其它值。
+
+```
+Optional<Book> optBook = Optional.of(book);
+String bookName = optBook.orElse("Unknown");
+```
+
+##### 3.3.4、orElseGet
+
+orElseGet与orElse方法类似，区别在于得到的默认值。orElse方法将传入的字符串作为默认值，orElseGet方法可以接受
+
+Supplier接口的实现用来生成默认值。
+
+```
+Optional<Book> optBook = Optional.of(book);
+String bookName = optBook.orElseGet(() -> "Unknown");
+```
+
+##### 3.3.5、orElseThrow
+
+如果有值则将其返回，否则抛出supplier接口创建的异常。
+
+```
+try{
+  empty.orElseThrow(ValueAbsentException::new);
+}
+catch (Throwable ex) {
+  //输出:
+  No value present in the Optional instance
+  System.out.println(ex.getMessage());
+}
+```
+
+##### 3.3.6、map
+
+如果有值，则对其执行调用mapping函数得到返回值。如果返回值不为null，则创建包含mapping返回值的Optional作为map方法返回值，否则返回空Optional。
+
+##### 3.3.7、flatMap
+
+如果有值，为其执行mapping函数返回Optional类型返回值，否则返回空Optional。flatMap与map（Funtion）方法类似，区别在于flatMap中的mapping返回值必须是Optional。调用结束时，flatMap不会对结果用Optional封装。
+
+##### 3.3.8、filter
+
+如果有值并且满足断言条件返回包含该值的Optional，否则返回空Optional。
 
 
 
